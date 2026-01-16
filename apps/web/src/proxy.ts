@@ -7,7 +7,7 @@ const protectedRoutes = ["/editor", "/projects"];
 // Routes that should redirect to projects if already logged in
 const authRoutes = ["/login", "/signup"];
 
-export async function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Handle fuckcapcut.com domain redirect
