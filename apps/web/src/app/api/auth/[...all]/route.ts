@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 // CRITICAL: Force Node.js runtime - Edge doesn't support pg/PostgreSQL
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 const handler = toNextJsHandler(auth);
 

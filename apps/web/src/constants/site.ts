@@ -1,4 +1,4 @@
-export const SITE_URL = "https://vlogcut.io";
+export const SITE_URL = "https://www.vlogcut.io";
 
 export const SITE_INFO = {
   title: "VLOGCUT",
