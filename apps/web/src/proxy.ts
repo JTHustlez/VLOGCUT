@@ -15,8 +15,11 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect("https://opencut.app/why-not-capcut", 301);
   }
 
-  // Check for session cookie (better-auth uses this cookie name)
-  const sessionCookie = request.cookies.get("better-auth.session_token");
+  // Check for session cookie (better-auth prefixes with __Secure- when secure=true)
+  // Try both names to handle both development and production
+  const sessionCookie = 
+    request.cookies.get("__Secure-better-auth.session_token") ||
+    request.cookies.get("better-auth.session_token");
   const isLoggedIn = !!sessionCookie?.value;
 
   // Check if trying to access protected route without being logged in
