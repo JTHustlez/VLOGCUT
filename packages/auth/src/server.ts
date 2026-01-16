@@ -1,23 +1,26 @@
 import { betterAuth } from "better-auth";
-import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { db } from "@opencut/db";
+import { Pool } from "pg";
 
-// Simplified - removed Redis rate limiting to debug
+// Better Auth requires DATABASE_URL, BETTER_AUTH_URL, and BETTER_AUTH_SECRET
+const DATABASE_URL = process.env.DATABASE_URL;
 const BETTER_AUTH_SECRET = process.env.BETTER_AUTH_SECRET;
-const NEXT_PUBLIC_BETTER_AUTH_URL = process.env.NEXT_PUBLIC_BETTER_AUTH_URL;
+const BETTER_AUTH_URL = process.env.BETTER_AUTH_URL;
+
+if (!DATABASE_URL) {
+  throw new Error("DATABASE_URL is not set");
+}
 
 if (!BETTER_AUTH_SECRET) {
   throw new Error("BETTER_AUTH_SECRET is not set");
 }
 
-if (!NEXT_PUBLIC_BETTER_AUTH_URL) {
-  throw new Error("NEXT_PUBLIC_BETTER_AUTH_URL is not set");
+if (!BETTER_AUTH_URL) {
+  throw new Error("BETTER_AUTH_URL is not set");
 }
 
 export const auth = betterAuth({
-  database: drizzleAdapter(db, {
-    provider: "pg",
-    usePlural: true,
+  database: new Pool({
+    connectionString: DATABASE_URL,
   }),
   secret: BETTER_AUTH_SECRET,
   user: {
@@ -28,7 +31,7 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
-  baseURL: NEXT_PUBLIC_BETTER_AUTH_URL,
+  baseURL: BETTER_AUTH_URL,
   appName: "VlogCut",
   trustedOrigins: [
     "http://localhost:3000",
