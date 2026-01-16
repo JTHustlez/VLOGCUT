@@ -2,6 +2,9 @@ import { auth } from "@opencut/auth";
 import { toNextJsHandler } from "better-auth/next-js";
 import { NextRequest, NextResponse } from "next/server";
 
+// CRITICAL: Force Node.js runtime - Edge doesn't support pg/PostgreSQL
+export const runtime = "nodejs";
+
 const handler = toNextJsHandler(auth);
 
 export async function POST(request: NextRequest) {
