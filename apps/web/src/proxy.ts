@@ -4,9 +4,6 @@ import type { NextRequest } from "next/server";
 // Routes that require authentication
 const protectedRoutes = ["/editor", "/projects"];
 
-// Routes that should redirect to projects if already logged in
-const authRoutes = ["/login", "/signup"];
-
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -33,12 +30,8 @@ export function proxy(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  // Redirect logged-in users away from auth pages
-  const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
-
-  if (isAuthRoute && isLoggedIn) {
-    return NextResponse.redirect(new URL("/projects", request.url));
-  }
+  // Don't redirect from auth pages - let the pages handle their own logic
+  // This prevents issues with stale cookies causing infinite redirects
 
   return NextResponse.next();
 }
