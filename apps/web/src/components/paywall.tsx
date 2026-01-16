@@ -1,19 +1,20 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { Crown, Check, Video } from "lucide-react";
+import { useState } from "react";
+import { Crown, Check, Video, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSubscription } from "@/hooks/use-subscription";
 import { useSession } from "@opencut/auth/client";
+import { toast } from "sonner";
 
 interface PaywallProps {
   children: React.ReactNode;
 }
 
 export function Paywall({ children }: PaywallProps) {
-  const router = useRouter();
   const { data: session, isPending: isSessionLoading } = useSession();
   const { isLoading: isSubscriptionLoading, isPro } = useSubscription();
+  const [isCheckoutLoading, setIsCheckoutLoading] = useState(false);
 
   // While loading or not logged in, show children
   // Middleware handles redirect to login for non-logged-in users
@@ -38,8 +39,29 @@ export function Paywall({ children }: PaywallProps) {
     "Sound effects library",
   ];
 
-  const handleSubscribe = () => {
-    router.push("/pricing");
+  const handleSubscribe = async () => {
+    setIsCheckoutLoading(true);
+    try {
+      const response = await fetch("/api/stripe/checkout", {
+        method: "POST",
+      });
+
+      const data = await response.json();
+
+      if (data.error) {
+        toast.error(data.error);
+        return;
+      }
+
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch (error) {
+      console.error("Checkout error:", error);
+      toast.error("Failed to start checkout. Please try again.");
+    } finally {
+      setIsCheckoutLoading(false);
+    }
   };
 
   return (
@@ -84,12 +106,22 @@ export function Paywall({ children }: PaywallProps) {
           <Button
             type="button"
             onClick={handleSubscribe}
+            disabled={isCheckoutLoading}
             className="w-full h-12 text-base font-semibold"
             variant="primary-gradient"
             size="lg"
           >
-            <Crown className="h-5 w-5 mr-2" />
-            Subscribe Now
+            {isCheckoutLoading ? (
+              <>
+                <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                Loading...
+              </>
+            ) : (
+              <>
+                <Crown className="h-5 w-5 mr-2" />
+                Subscribe Now
+              </>
+            )}
           </Button>
 
           {/* Footer */}
