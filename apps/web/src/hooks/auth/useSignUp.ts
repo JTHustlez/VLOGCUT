@@ -27,7 +27,8 @@ export function useSignUp() {
       return;
     }
 
-    router.push("/login");
+    // User is already logged in after signup, go directly to projects
+    router.push("/projects");
   }, [name, email, password, router]);
 
   const handleGoogleSignUp = useCallback(async () => {
