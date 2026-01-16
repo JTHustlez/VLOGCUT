@@ -21,6 +21,9 @@ if (!BETTER_AUTH_URL) {
 export const auth = betterAuth({
   database: new Pool({
     connectionString: DATABASE_URL,
+    ssl: {
+      rejectUnauthorized: false,
+    },
   }),
   secret: BETTER_AUTH_SECRET,
   user: {
