@@ -137,8 +137,7 @@ export default function ProjectsPage() {
     selectedProjects.size > 0 && selectedProjects.size < sortedProjects.length;
 
   return (
-    <>
-      <Paywall />
+    <Paywall>
       <div className="min-h-screen bg-background relative">
         {/* Subtle grid background */}
         <div 
@@ -390,7 +389,7 @@ export default function ProjectsPage() {
           onConfirm={handleBulkDelete}
         />
       </div>
-    </>
+    </Paywall>
   );
 }
 

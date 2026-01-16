@@ -1,40 +1,37 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Crown, Check, Loader2, Video } from "lucide-react";
+import { Crown, Check, Video } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSubscription } from "@/hooks/use-subscription";
 import { useSession } from "@opencut/auth/client";
 
-export function Paywall() {
+interface PaywallProps {
+  children: React.ReactNode;
+}
+
+export function Paywall({ children }: PaywallProps) {
   const router = useRouter();
   const { data: session, isPending: isSessionLoading } = useSession();
   const { isLoading: isSubscriptionLoading, isPro } = useSubscription();
 
-  const isLoading = isSessionLoading || isSubscriptionLoading;
-
-  // Show loading state while checking auth/subscription
-  if (isLoading) {
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-background">
-        <div className="flex flex-col items-center gap-4">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          <p className="text-muted-foreground">Loading...</p>
-        </div>
-      </div>
-    );
+  // While loading, show the children (page content)
+  // The proxy will handle redirecting non-logged-in users
+  if (isSessionLoading || isSubscriptionLoading) {
+    return <>{children}</>;
   }
 
-  // If user is NOT logged in, don't show paywall - let proxy redirect to login
+  // If not logged in, show children (proxy will redirect to login)
   if (!session?.user) {
-    return null;
+    return <>{children}</>;
   }
 
-  // If user is logged in AND subscribed, don't show paywall
+  // If user is logged in AND subscribed, show children (the app)
   if (isPro) {
-    return null;
+    return <>{children}</>;
   }
 
+  // User is logged in but NOT subscribed - show paywall INSTEAD of children
   const features = [
     "Unlimited projects",
     "4K export quality",
@@ -51,8 +48,8 @@ export function Paywall() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/95 backdrop-blur-sm">
-      <div className="relative max-w-lg w-full mx-4">
+    <div className="h-screen w-screen flex items-center justify-center bg-background p-8">
+      <div className="relative max-w-lg w-full">
         {/* Glow effect */}
         <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 rounded-2xl blur-xl" />
         
@@ -90,6 +87,7 @@ export function Paywall() {
 
           {/* CTA Button */}
           <Button
+            type="button"
             onClick={handleSubscribe}
             className="w-full h-12 text-base font-semibold"
             variant="primary-gradient"

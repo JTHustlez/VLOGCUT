@@ -153,8 +153,8 @@ export default function Editor() {
 
   return (
     <EditorProvider>
-      <Paywall />
-      <div className="h-screen w-screen flex flex-col bg-background overflow-hidden">
+      <Paywall>
+        <div className="h-screen w-screen flex flex-col bg-background overflow-hidden">
         <EditorHeader />
         <div className="flex-1 min-h-0 min-w-0">
           {activePreset === "media" ? (
@@ -456,6 +456,7 @@ export default function Editor() {
         </div>
         <Onboarding />
       </div>
+      </Paywall>
     </EditorProvider>
   );
 }
