@@ -1,11 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Crown, Check, Video, Loader2 } from "lucide-react";
+import { Crown, Check, Video } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSubscription } from "@/hooks/use-subscription";
 import { useSession } from "@opencut/auth/client";
-import { useEffect } from "react";
 
 interface PaywallProps {
   children: React.ReactNode;
@@ -16,29 +15,10 @@ export function Paywall({ children }: PaywallProps) {
   const { data: session, isPending: isSessionLoading } = useSession();
   const { isLoading: isSubscriptionLoading, isPro } = useSubscription();
 
-  // Redirect to login if not logged in
-  useEffect(() => {
-    if (!isSessionLoading && !session?.user) {
-      router.push("/login");
-    }
-  }, [isSessionLoading, session, router]);
-
-  // While loading, show a loading spinner
-  if (isSessionLoading || isSubscriptionLoading) {
-    return (
-      <div className="h-screen w-screen flex items-center justify-center bg-background">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
-  }
-
-  // If not logged in, show loading while redirect happens
-  if (!session?.user) {
-    return (
-      <div className="h-screen w-screen flex items-center justify-center bg-background">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
+  // While loading or not logged in, show children
+  // Middleware handles redirect to login for non-logged-in users
+  if (isSessionLoading || isSubscriptionLoading || !session?.user) {
+    return <>{children}</>;
   }
 
   // If user is logged in AND subscribed, show children (the app)
