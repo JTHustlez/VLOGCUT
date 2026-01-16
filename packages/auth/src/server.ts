@@ -43,8 +43,12 @@ export const auth = betterAuth({
     },
   },
   baseURL: NEXT_PUBLIC_BETTER_AUTH_URL,
-  appName: "OpenCut",
-  trustedOrigins: ["http://localhost:3000"],
+  appName: "VlogCut",
+  trustedOrigins: [
+    "http://localhost:3000",
+    "https://vlogcut.io",
+    "https://www.vlogcut.io",
+  ],
 });
 
 export type Auth = typeof auth;

@@ -1,0 +1,101 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+import { Crown, Check, Loader2, Video } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useSubscription } from "@/hooks/use-subscription";
+
+export function Paywall() {
+  const router = useRouter();
+  const { isLoading, isPro } = useSubscription();
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-background">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // If user is subscribed, don't show paywall
+  if (isPro) {
+    return null;
+  }
+
+  const features = [
+    "Unlimited projects",
+    "4K export quality",
+    "50GB storage",
+    "No watermark",
+    "Priority support",
+    "Stream export for long videos",
+    "AI transcription",
+    "Sound effects library",
+  ];
+
+  const handleSubscribe = () => {
+    router.push("/pricing");
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/95 backdrop-blur-sm">
+      <div className="relative max-w-lg w-full mx-4">
+        {/* Glow effect */}
+        <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 rounded-2xl blur-xl" />
+        
+        <div className="relative bg-card border border-border/50 rounded-2xl p-8 shadow-2xl">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4 border border-primary/20">
+              <Video className="h-8 w-8 text-primary" />
+            </div>
+            <h1 className="text-2xl font-bold mb-2">Subscribe to VlogCut Pro</h1>
+            <p className="text-muted-foreground">
+              Unlock the full power of VlogCut to create amazing videos
+            </p>
+          </div>
+
+          {/* Price */}
+          <div className="text-center mb-6">
+            <div className="flex items-baseline justify-center gap-1">
+              <span className="text-4xl font-bold">$24.99</span>
+              <span className="text-muted-foreground">/month</span>
+            </div>
+          </div>
+
+          {/* Features */}
+          <div className="space-y-3 mb-8">
+            {features.map((feature) => (
+              <div key={feature} className="flex items-center gap-3">
+                <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                  <Check className="h-3 w-3 text-primary" />
+                </div>
+                <span className="text-sm">{feature}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* CTA Button */}
+          <Button
+            onClick={handleSubscribe}
+            className="w-full h-12 text-base font-semibold"
+            variant="primary-gradient"
+            size="lg"
+          >
+            <Crown className="h-5 w-5 mr-2" />
+            Subscribe Now
+          </Button>
+
+          {/* Footer */}
+          <p className="text-center text-xs text-muted-foreground mt-4">
+            Cancel anytime. 30-day money back guarantee.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -39,6 +39,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useProjectStore } from "@/stores/project-store";
 import { useTimelineStore } from "@/stores/timeline-store";
 import type { TProject } from "@/types/project";
+import { Paywall } from "@/components/paywall";
 
 export default function ProjectsPage() {
   const {
@@ -136,18 +137,20 @@ export default function ProjectsPage() {
     selectedProjects.size > 0 && selectedProjects.size < sortedProjects.length;
 
   return (
-    <div className="min-h-screen bg-background relative">
-      {/* Subtle grid background */}
-      <div 
-        className="fixed inset-0 -z-10 opacity-30 pointer-events-none"
-        style={{
-          backgroundImage: `
-            linear-gradient(hsl(45, 67%, 52%, 0.03) 1px, transparent 1px),
-            linear-gradient(90deg, hsl(45, 67%, 52%, 0.03) 1px, transparent 1px)
-          `,
-          backgroundSize: '50px 50px',
-        }}
-      />
+    <>
+      <Paywall />
+      <div className="min-h-screen bg-background relative">
+        {/* Subtle grid background */}
+        <div 
+          className="fixed inset-0 -z-10 opacity-30 pointer-events-none"
+          style={{
+            backgroundImage: `
+              linear-gradient(hsl(45, 67%, 52%, 0.03) 1px, transparent 1px),
+              linear-gradient(90deg, hsl(45, 67%, 52%, 0.03) 1px, transparent 1px)
+            `,
+            backgroundSize: '50px 50px',
+          }}
+        />
 
       <div className="pt-6 px-6 flex items-center justify-between w-full h-16">
         <Link
@@ -381,12 +384,13 @@ export default function ProjectsPage() {
         )}
       </main>
 
-      <DeleteProjectDialog
-        isOpen={isBulkDeleteDialogOpen}
-        onOpenChange={setIsBulkDeleteDialogOpen}
-        onConfirm={handleBulkDelete}
-      />
-    </div>
+        <DeleteProjectDialog
+          isOpen={isBulkDeleteDialogOpen}
+          onOpenChange={setIsBulkDeleteDialogOpen}
+          onConfirm={handleBulkDelete}
+        />
+      </div>
+    </>
   );
 }
 
