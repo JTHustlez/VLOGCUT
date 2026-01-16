@@ -42,6 +42,18 @@ export const auth = betterAuth({
     "https://vlogcut.io",
     "https://www.vlogcut.io",
   ],
+  // Cookie configuration to ensure cookies work across www and non-www
+  advanced: {
+    crossSubDomainCookies: {
+      enabled: true,
+      domain: ".vlogcut.io", // Allow cookies on all subdomains
+    },
+    defaultCookieAttributes: {
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+    },
+  },
   // CRITICAL: nextCookies plugin is REQUIRED for Next.js App Router
   // Without it, session cookies won't be set properly after signin/signup
   plugins: [nextCookies()],
