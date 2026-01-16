@@ -25,7 +25,7 @@ export const users = pgTable("users", {
   updatedAt: timestamp("updated_at")
     .$defaultFn(() => new Date())
     .notNull(),
-}).enableRLS();
+});
 
 export const sessions = pgTable("sessions", {
   id: text("id").primaryKey(),
@@ -38,7 +38,7 @@ export const sessions = pgTable("sessions", {
   userId: text("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-}).enableRLS();
+});
 
 export const accounts = pgTable("accounts", {
   id: text("id").primaryKey(),
@@ -56,7 +56,7 @@ export const accounts = pgTable("accounts", {
   password: text("password"),
   createdAt: timestamp("created_at").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
-}).enableRLS();
+});
 
 export const verifications = pgTable("verifications", {
   id: text("id").primaryKey(),
@@ -65,7 +65,7 @@ export const verifications = pgTable("verifications", {
   expiresAt: timestamp("expires_at").notNull(),
   createdAt: timestamp("created_at").$defaultFn(() => new Date()),
   updatedAt: timestamp("updated_at").$defaultFn(() => new Date()),
-}).enableRLS();
+});
 
 // ============================================
 // VIDEO EDITOR TABLES
@@ -95,7 +95,7 @@ export const projects = pgTable("projects", {
   updatedAt: timestamp("updated_at").$defaultFn(() => new Date()).notNull(),
 }, (table) => [
   index("projects_user_id_idx").on(table.userId),
-]).enableRLS();
+]);
 
 // Scenes - scenes within a project (for multi-scene editing)
 export const scenes = pgTable("scenes", {
@@ -110,7 +110,7 @@ export const scenes = pgTable("scenes", {
   updatedAt: timestamp("updated_at").$defaultFn(() => new Date()).notNull(),
 }, (table) => [
   index("scenes_project_id_idx").on(table.projectId),
-]).enableRLS();
+]);
 
 // Media Files - metadata for uploaded media (actual files stored in R2)
 export const mediaFiles = pgTable("media_files", {
@@ -141,7 +141,7 @@ export const mediaFiles = pgTable("media_files", {
 }, (table) => [
   index("media_files_project_id_idx").on(table.projectId),
   index("media_files_user_id_idx").on(table.userId),
-]).enableRLS();
+]);
 
 // Timeline Tracks - tracks in the timeline editor
 export const timelineTracks = pgTable("timeline_tracks", {
@@ -158,7 +158,7 @@ export const timelineTracks = pgTable("timeline_tracks", {
   updatedAt: timestamp("updated_at").$defaultFn(() => new Date()).notNull(),
 }, (table) => [
   index("timeline_tracks_scene_id_idx").on(table.sceneId),
-]).enableRLS();
+]);
 
 // Timeline Elements - elements (clips, text overlays) on tracks
 export const timelineElements = pgTable("timeline_elements", {
@@ -199,7 +199,7 @@ export const timelineElements = pgTable("timeline_elements", {
 }, (table) => [
   index("timeline_elements_track_id_idx").on(table.trackId),
   index("timeline_elements_media_id_idx").on(table.mediaId),
-]).enableRLS();
+]);
 
 // Exports - history of exported videos
 export const exports = pgTable("exports", {
@@ -231,7 +231,7 @@ export const exports = pgTable("exports", {
 }, (table) => [
   index("exports_project_id_idx").on(table.projectId),
   index("exports_user_id_idx").on(table.userId),
-]).enableRLS();
+]);
 
 // Export Waitlist (legacy - keeping for backward compatibility)
 export const exportWaitlist = pgTable("export_waitlist", {
@@ -243,4 +243,4 @@ export const exportWaitlist = pgTable("export_waitlist", {
   updatedAt: timestamp("updated_at")
     .$defaultFn(() => new Date())
     .notNull(),
-}).enableRLS();
+});
