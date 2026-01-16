@@ -4,19 +4,6 @@
   "buildCommand": "bun run build",
   "installCommand": "bun install",
   "regions": ["iad1"],
-  "redirects": [
-    {
-      "source": "/:path*",
-      "has": [
-        {
-          "type": "host",
-          "value": "www.vlogcut.io"
-        }
-      ],
-      "destination": "https://vlogcut.io/:path*",
-      "permanent": true
-    }
-  ],
   "headers": [
     {
       "source": "/api/(.*)",
