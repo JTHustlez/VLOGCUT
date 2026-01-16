@@ -1,4 +1,5 @@
 import { betterAuth } from "better-auth";
+import { nextCookies } from "better-auth/next-js";
 import { Pool } from "pg";
 
 // Better Auth requires DATABASE_URL, BETTER_AUTH_URL, and BETTER_AUTH_SECRET
@@ -41,6 +42,9 @@ export const auth = betterAuth({
     "https://vlogcut.io",
     "https://www.vlogcut.io",
   ],
+  // CRITICAL: nextCookies plugin is REQUIRED for Next.js App Router
+  // Without it, session cookies won't be set properly after signin/signup
+  plugins: [nextCookies()],
 });
 
 export type Auth = typeof auth;
