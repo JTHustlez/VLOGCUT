@@ -49,7 +49,7 @@ export function Paywall({ children }: PaywallProps) {
       const data = await response.json();
 
       if (data.error) {
-        toast.error(data.error);
+        toast.error(data.details ? `${data.error}: ${data.details}` : data.error);
         return;
       }
 
