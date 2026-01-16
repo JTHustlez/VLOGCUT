@@ -17,7 +17,7 @@ import { useSession } from "@opencut/auth/client";
 import { toast } from "sonner";
 
 interface UpgradeButtonProps {
-  variant?: "default" | "outline" | "ghost" | "link";
+  variant?: "default" | "outline" | "secondary" | "link";
   size?: "default" | "sm" | "lg" | "icon";
   className?: string;
   children?: React.ReactNode;
@@ -34,12 +34,12 @@ export function UpgradeButton({
   reason,
 }: UpgradeButtonProps) {
   const router = useRouter();
-  const { session } = useSession();
+  const { data } = useSession();
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleUpgrade = async () => {
-    if (!session?.user) {
+    if (!data?.user) {
       router.push("/login?redirect=/pricing");
       return;
     }
@@ -118,7 +118,7 @@ export function UpgradeButton({
               </>
             )}
           </Button>
-          <Button variant="ghost" onClick={() => setIsOpen(false)}>
+          <Button variant="secondary" onClick={() => setIsOpen(false)}>
             Maybe Later
           </Button>
         </div>
@@ -138,7 +138,7 @@ export function UpgradePrompt({
   onUpgrade?: () => void;
 }) {
   const router = useRouter();
-  const { session } = useSession();
+  const { data: sessionData } = useSession();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleUpgrade = async () => {
@@ -147,7 +147,7 @@ export function UpgradePrompt({
       return;
     }
 
-    if (!session?.user) {
+    if (!sessionData?.user) {
       router.push("/login?redirect=/pricing");
       return;
     }

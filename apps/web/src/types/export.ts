@@ -1,3 +1,16 @@
+// Extend Window interface for File System Access API
+declare global {
+  interface Window {
+    showSaveFilePicker?: (options?: {
+      suggestedName?: string;
+      types?: Array<{
+        description?: string;
+        accept: Record<string, string[]>;
+      }>;
+    }) => Promise<FileSystemFileHandle>;
+  }
+}
+
 export type ExportFormat = "mp4" | "webm";
 export type ExportQuality = "low" | "medium" | "high" | "very_high";
 export type ExportMode = "buffer" | "stream";
@@ -43,7 +56,7 @@ export async function getExportFileHandle({
   }
 
   try {
-    const handle = await window.showSaveFilePicker({
+    const handle = await window.showSaveFilePicker!({
       suggestedName: `${suggestedName}.${format}`,
       types: [
         {

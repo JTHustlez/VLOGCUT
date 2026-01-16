@@ -10,6 +10,7 @@ import {
   MarbleIcon,
   VercelIcon,
   DataBuddyIcon,
+  DiscordIcon,
 } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { EXTERNAL_TOOLS } from "@/constants/site";
@@ -256,6 +257,7 @@ export default async function ContributorsPage() {
                     MarbleIcon,
                     VercelIcon,
                     DataBuddyIcon,
+                    DiscordIcon,
                   }[tool.icon];
 
                   return (

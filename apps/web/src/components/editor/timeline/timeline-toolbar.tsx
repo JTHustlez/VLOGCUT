@@ -224,7 +224,7 @@ export function TimelineToolbar({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
-                    variant="neon-outline"
+                    variant="outline"
                     size="sm"
                     onClick={() => {
                       const trackId = addTrack("media");
