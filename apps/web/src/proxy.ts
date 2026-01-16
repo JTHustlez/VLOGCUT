@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   // Handle fuckcapcut.com domain redirect
   if (request.headers.get("host") === "fuckcapcut.com") {
     return NextResponse.redirect("https://opencut.app/why-not-capcut", 301);
