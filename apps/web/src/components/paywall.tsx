@@ -4,12 +4,16 @@ import { useRouter } from "next/navigation";
 import { Crown, Check, Loader2, Video } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSubscription } from "@/hooks/use-subscription";
+import { useSession } from "@opencut/auth/client";
 
 export function Paywall() {
   const router = useRouter();
-  const { isLoading, isPro } = useSubscription();
+  const { data: session, isPending: isSessionLoading } = useSession();
+  const { isLoading: isSubscriptionLoading, isPro } = useSubscription();
 
-  // Show loading state
+  const isLoading = isSessionLoading || isSubscriptionLoading;
+
+  // Show loading state while checking auth/subscription
   if (isLoading) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-background">
@@ -21,7 +25,12 @@ export function Paywall() {
     );
   }
 
-  // If user is subscribed, don't show paywall
+  // If user is NOT logged in, don't show paywall - let proxy redirect to login
+  if (!session?.user) {
+    return null;
+  }
+
+  // If user is logged in AND subscribed, don't show paywall
   if (isPro) {
     return null;
   }
