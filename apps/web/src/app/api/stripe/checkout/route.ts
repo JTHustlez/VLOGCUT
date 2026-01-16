@@ -20,10 +20,32 @@ export async function POST(request: NextRequest) {
     const userEmail = session.user.email;
 
     // Get user from database
-    const [user] = await db.select().from(users).where(eq(users.id, userId));
+    let [user] = await db.select().from(users).where(eq(users.id, userId));
 
+    // If user doesn't exist in our table, create them from session data
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      const [newUser] = await db
+        .insert(users)
+        .values({
+          id: userId,
+          email: userEmail,
+          name: session.user.name || userEmail.split("@")[0],
+          emailVerified: session.user.emailVerified || false,
+          image: session.user.image || null,
+          plan: "none",
+          projectCount: 0,
+          storageUsedBytes: 0,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        })
+        .onConflictDoNothing()
+        .returning();
+      
+      user = newUser || (await db.select().from(users).where(eq(users.id, userId)))[0];
+      
+      if (!user) {
+        return NextResponse.json({ error: "Failed to create user" }, { status: 500 });
+      }
     }
 
     // Check if user already has an active subscription

@@ -28,7 +28,7 @@ export function Header() {
 
   const rightContent = (
     <nav className="flex items-center gap-2">
-      <Link href="/projects">
+      <Link href="/login">
         <Button variant="primary" size="sm" className="text-sm ml-2">
           Launch Editor
           <ArrowRight className="h-4 w-4" />
