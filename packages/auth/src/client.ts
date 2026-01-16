@@ -1,7 +1,6 @@
 import { createAuthClient } from "better-auth/react";
 
-// Absolute minimum configuration - no validation, no fancy options
-// Just create the client with the public URL
-export const { signIn, signUp, useSession } = createAuthClient({
-  baseURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL || "",
-});
+// For client-side auth, we don't need baseURL when making requests to the same origin
+// Better Auth will use relative URLs (/api/auth/*) which work perfectly
+// DO NOT use process.env here as it may not be available in the client bundle
+export const { signIn, signUp, useSession } = createAuthClient();
