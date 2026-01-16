@@ -119,7 +119,7 @@ export function Hero() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6, duration: 0.8 }}
         >
-          {['No watermarks', 'Free forever', 'No signup required', 'Privacy-first'].map((feature, index) => (
+          {['No watermarks', '4K exports', 'Browser-based', 'Privacy-first'].map((feature, index) => (
             <motion.span
               key={feature}
               initial={{ opacity: 0, scale: 0.9 }}
@@ -139,7 +139,7 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8, duration: 0.8 }}
         >
-          <Link href="/projects">
+          <Link href="/login">
             <Button
               type="button"
               variant="primary-gradient"

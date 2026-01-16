@@ -31,6 +31,36 @@ export const auth = betterAuth({
     deleteUser: {
       enabled: true,
     },
+    additionalFields: {
+      plan: {
+        type: "string",
+        defaultValue: "none",
+      },
+      stripeCustomerId: {
+        type: "string",
+        required: false,
+      },
+      stripeSubscriptionId: {
+        type: "string",
+        required: false,
+      },
+      stripePriceId: {
+        type: "string",
+        required: false,
+      },
+      stripeCurrentPeriodEnd: {
+        type: "date",
+        required: false,
+      },
+      projectCount: {
+        type: "number",
+        defaultValue: 0,
+      },
+      storageUsedBytes: {
+        type: "number",
+        defaultValue: 0,
+      },
+    },
   },
   emailAndPassword: {
     enabled: true,
