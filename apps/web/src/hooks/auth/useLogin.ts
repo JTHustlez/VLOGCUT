@@ -14,18 +14,27 @@ export function useLogin() {
     setError(null);
     setIsEmailLoading(true);
 
-    const { error } = await signIn.email({
-      email,
-      password,
-    });
+    try {
+      const { error } = await signIn.email({
+        email,
+        password,
+      });
 
-    if (error) {
-      setError(error.message || "An unexpected error occurred.");
+      if (error) {
+        setError(error.message || "An unexpected error occurred.");
+        return;
+      }
+
+      router.push("/projects");
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? error.message
+          : "An unexpected error occurred."
+      );
+    } finally {
       setIsEmailLoading(false);
-      return;
     }
-
-    router.push("/projects");
   }, [router, email, password]);
 
   const handleGoogleLogin = async () => {
@@ -39,6 +48,7 @@ export function useLogin() {
       });
     } catch (error) {
       setError("Failed to sign in with Google. Please try again.");
+    } finally {
       setIsGoogleLoading(false);
     }
   };
